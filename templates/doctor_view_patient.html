@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Patient Details - MedTrack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      background-color: #f0f6ff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 50px auto;
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      animation: fadeUp 1s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h2 {
+      text-align: center;
+      background: linear-gradient(135deg, #317dea, #0a3d62);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 16px;
+    }
+
+    th {
+      background-color: #317dea;
+      color: white;
+      padding: 15px;
+      text-align: left;
+    }
+
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #ddd;
+      color: #333;
+      background-color: #ffffff;
+    }
+
+    tr:hover td {
+      background-color: #f2f8ff;
+    }
+
+    .action-btn {
+      padding: 8px 16px;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+
+    .accept-btn {
+      background-color: #28a745;
+    }
+
+    .accept-btn:hover {
+      background-color: #218838;
+      transform: scale(1.05);
+    }
+
+    .reject-btn {
+      background-color: #dc3545;
+    }
+
+    .reject-btn:hover {
+      background-color: #c82333;
+      transform: scale(1.05);
+    }
+
+    .back-btn {
+      background: linear-gradient(135deg, #317dea, #0a3d62);
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: #0a3d62;
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      tr {
+        margin-bottom: 20px;
+      }
+
+      th, td {
+        text-align: right;
+        padding-left: 50%;
+        position: relative;
+      }
+
+      th::before, td::before {
+        position: absolute;
+        left: 20px;
+        white-space: nowrap;
+        font-weight: bold;
+      }
+
+      th:nth-of-type(1)::before { content: "Name"; }
+      th:nth-of-type(2)::before { content: "Gender"; }
+      th:nth-of-type(3)::before { content: "Date"; }
+      th:nth-of-type(4)::before { content: "Time"; }
+      th:nth-of-type(5)::before { content: "Problem"; }
+      th:nth-of-type(6)::before { content: "Status"; }
+      th:nth-of-type(7)::before { content: "Action"; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Patient Appointment Details</h2>
+
+    <form method="POST">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Problem</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for appt in doctor_appointments %}
+          <tr>
+            <td>{{ appt.patient }}</td>
+            <td>{{ appt.gender if appt.gender else 'N/A' }}</td>
+            <td>{{ appt.date }}</td>
+            <td>{{ appt.time }}</td>
+            <td>{{ appt.problem }}</td>
+            <td>{{ appt.status if appt.status else 'Pending' }}</td>
+            <td>
+              {% if not appt.status %}
+              <form method="POST" style="display:inline;">
+                <input type="hidden" name="patient" value="{{ appt.patient }}">
+                <input type="hidden" name="date" value="{{ appt.date }}">
+                <input type="hidden" name="time" value="{{ appt.time }}">
+                <button type="submit" name="action" value="accept" class="action-btn accept-btn">Accept</button>
+                <button type="submit" name="action" value="reject" class="action-btn reject-btn">Reject</button>
+              </form>
+              {% else %}
+              {{ appt.status }}
+              {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="7" style="text-align:center;">No patient records found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </form>
+
+    <div style="text-align:center;">
+    <a href="{{ url_for('doctor_dashboard', name=doctor_name) }}" class="back-btn"> ← Back to Dashboard</a>
+    </div>
+
+  </div>
+
+</body>
+</html>

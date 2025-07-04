@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Book Appointment - MedTrack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f6ff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar {
+      background-color: #0a3d62;
+      padding: 15px 30px;
+      color: white;
+      display: flex;
+      justify-content: flex-end;
+      gap: 30px;
+    }
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+      cursor: pointer;
+    }
+    .navbar a:hover {
+      color: #cce0ff;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      color: #0a3d62;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .doctor {
+      border: 2px solid #317dea;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    summary.book-summary {
+      background-color: #317dea;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      list-style: none;
+      font-size: 16px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    summary.book-summary:hover {
+      background-color: #245bb5;
+      transform: translateY(-2px);
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details[open] summary::after {
+      content: " ▲";
+      font-size: 12px;
+      margin-left: 5px;
+    }
+
+    summary::after {
+      content: " ▼";
+      font-size: 12px;
+      margin-left: 5px;
+    }
+
+    .appointment-form label {
+      display: block;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    .appointment-form input, .appointment-form textarea {
+      padding: 10px;
+      width: 100%;
+      max-width: 400px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    button, .dashboard-link {
+      background-color: #0a3d62;
+      color: white;
+      padding: 10px 22px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 15px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    button:hover, .dashboard-link:hover {
+      background-color: #063051;
+      transform: translateY(-2px);
+    }
+
+    .success-popup {
+      position: fixed;
+      top: 20px;
+      right: -400px;
+      background-color: #317dea; /* BLUE THEME for success popup */
+      color: white;
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      font-weight: bold;
+      animation: slideIn 0.5s forwards;
+      z-index: 1000;
+    }
+
+    @keyframes slideIn {
+      to {
+        right: 20px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="{{ url_for('patient_dash', name=name) }}">Dashboard</a>
+    <a href="{{ url_for('patient_profile', name=name) }}">Profile</a>
+    <a href="{{ url_for('index') }}">Logout</a>
+  </div>
+
+  {% if success_message %}
+  <div class="success-popup">
+    {{ success_message }}
+  </div>
+  {% endif %}
+
+  <div class="container">
+    <h2>Available Doctors for Appointment</h2>
+
+    {% for doctor in doctors %}
+    <div class="doctor">
+      <details>
+        <summary class="book-summary">Book Appointment with Dr. {{ doctor.fullname }}</summary>
+        <div class="appointment-form">
+          <form method="POST">
+            <input type="hidden" name="doctor" value="{{ doctor.fullname }}">
+
+            <label>Date:</label>
+            <input type="date" name="date" required>
+
+            <label>Time:</label>
+            <input type="time" name="time" required>
+
+            <label>Your Problem:</label>
+            <input type="text" name="problem" placeholder="Describe your problem" required>
+
+            <button type="submit">Confirm Appointment</button>
+          </form>
+        </div>
+      </details>
+    </div>
+    {% endfor %}
+
+    <div style="text-align: center;">
+      <a href="{{ url_for('patient_dash', name=name) }}" class="dashboard-link">← Back to Dashboard</a>
+    </div>
+  </div>
+
+</body>
+</html>

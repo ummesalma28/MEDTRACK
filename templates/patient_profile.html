@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Patient Profile - MedTrack</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f6ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .profile-container {
+            max-width: 700px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            animation: fadeSlide 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #317dea, #0a3d62);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #0a3d62;
+        }
+
+        input, select {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+        }
+
+        button, .dashboard-btn {
+            background: linear-gradient(135deg, #317dea, #0a3d62);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+        }
+
+        button:hover, .dashboard-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px 18px;
+            border-radius: 5px;
+            border: 1px solid #c3e6cb;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="profile-container">
+    <h2>Patient Profile Update</h2>
+
+    {% if success %}
+    <div class="success-message">
+        Profile updated successfully!
+    </div>
+    {% endif %}
+
+    <form method="POST">
+        <label>Full Name:</label>
+        <input type="text" name="fullname" value="{{ user.fullname }}" required>
+
+        <label>Email:</label>
+        <input type="email" name="email" value="{{ user.email }}" required>
+
+        <label>Phone:</label>
+        <input type="text" name="phone" value="{{ user.phone }}" required>
+
+        <label>Gender:</label>
+        <select name="gender" required>
+            <option value="Male" {% if user.gender.lower() == 'male' %}selected{% endif %}>Male</option>
+            <option value="Female" {% if user.gender.lower() == 'female' %}selected{% endif %}>Female</option>
+            <option value="Other" {% if user.gender.lower() == 'other' %}selected{% endif %}>Other</option>
+        </select>
+
+        <label>Password:</label>
+        <input type="password" name="password" value="{{ user.password }}" required>
+
+        <div class="button-group">
+            <button type="submit">Update Profile</button>
+            <a href="{{ url_for('patient_dash', name=user.fullname) }}" class="dashboard-btn">← Return to Dashboard</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

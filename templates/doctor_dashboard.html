@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Doctor Dashboard - MedTrack</title>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .navbar {
+      background-color: #0a3d62;
+      padding: 15px 30px;
+      color: white;
+      display: flex;
+      justify-content: flex-end;
+      gap: 30px;
+      animation: fadeDown 1s ease-out forwards;
+      opacity: 0;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+    }
+
+    .welcome-banner {
+      background: linear-gradient(135deg, #317dea, #0a3d62);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      border-radius: 0 0 12px 12px;
+      animation: fadeDown 1s ease-out forwards;
+      opacity: 0;
+    }
+
+    h2, h3 {
+      color: #0a3d62;
+    }
+
+    .dashboard-container {
+      padding: 30px;
+      text-align: center;
+      animation: fadeUp 1.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+
+    .card {
+      background-color: white;
+      width: 240px;
+      height: 140px;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h3 {
+      margin: 0;
+      color: #317dea;
+      font-size: 26px;
+    }
+
+    .card p {
+      color: #444;
+      font-size: 15px;
+      margin-top: 8px;
+    }
+
+    .section-box {
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    hr.section-line {
+      width: 80%;
+      margin: 40px auto;
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+
+    table {
+      width: 95%;
+      margin: auto;
+      border-collapse: collapse;
+      font-size: 15px;
+    }
+
+    th, td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #317dea;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f2f8ff;
+    }
+
+    .more-btn {
+      margin-top: 20px;
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #317dea;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .more-btn:hover {
+      background-color: #0a3d62;
+    }
+
+    .prescription-form {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      margin-top: 30px;
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .prescription-form table {
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .prescription-form select, 
+    .prescription-form textarea, 
+    .prescription-form input[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .prescription-form input[type="submit"] {
+      background-color: #317dea;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .prescription-form input[type="submit"]:hover {
+      background-color: #0a3d62;
+      transform: scale(1.03);
+    }
+
+    @keyframes fadeDown {
+      from { transform: translateY(-20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 900px) {
+      .stats {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="#dashboard-top">Dashboard</a>
+    <a href="{{ url_for('doctor_profile', name=name) }}">Profile</a>
+    <a href="{{ url_for('index') }}">Logout</a>
+  </div>
+
+  <div class="welcome-banner" id="dashboard-top">
+    <strong>Welcome, Dr. {{ name }}</strong>
+    <p>Manage your appointments with MedTrack</p>
+  </div>
+
+  <div class="dashboard-container">
+    <h2>Doctor Dashboard</h2>
+
+    <!-- Stats Cards -->
+    <div class="stats">
+      <a href="#pending-section" style="text-decoration: none;">
+        <div class="card">
+          <h3>{{ pending_count }}</h3>
+          <p>Pending Appointments</p>
+        </div>
+      </a>
+
+      <a href="#completed-section" style="text-decoration: none;">
+        <div class="card">
+          <h3>{{ completed_count }}</h3>
+          <p>Completed Appointments</p>
+        </div>
+      </a>
+
+      <a href="#total-section" style="text-decoration: none;">
+        <div class="card">
+          <h3>{{ total_count }}</h3>
+          <p>Total Appointments</p>
+        </div>
+      </a>
+    </div>
+
+    <!-- Extra Cards -->
+    <div class="stats">
+      <a href="{{ url_for('doctor_view_patients', name=name) }}" style="text-decoration: none;">
+        <div class="card">
+          <h3>Patients</h3>
+          <p>View Details</p>
+        </div>
+      </a>
+
+      <a href="{{ url_for('doctor_dashboard', name=name, write_mode='yes') }}" style="text-decoration: none;">
+
+        <div class="card">
+          <h3>Write Prescriptions</h3>
+          <p>Click to prescribe</p>
+        </div>
+      </a>
+    </div>
+
+    {% if request.args.get('prescription_success') == 'yes' %}
+    <div style="background-color: #d4edda; color: #155724; padding: 12px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #c3e6cb;">
+      Prescription updated successfully!
+    </div>
+    {% endif %}
+
+    {% if write_mode %}
+      <!-- Prescription Form -->
+      <div class="prescription-form">
+        <h3>Write Prescription</h3>
+        <form method="POST" action="{{ url_for('submit_prescription') }}">
+          <input type="hidden" name="doctor" value="{{ name }}">
+          <table>
+            <tr>
+              <th>Patient Name</th>
+              <th>Prescription</th>
+            </tr>
+            <tr>
+              <td>
+                <select name="patient" required>
+                  {% for patient in patient_list %}
+                    <option value="{{ patient }}">{{ patient }}</option>
+                  {% endfor %}
+                </select>
+              </td>
+              <td>
+                <textarea name="prescription" rows="4" required></textarea>
+              </td>
+            </tr>
+          </table>
+          <input type="submit" value="Done">
+        </form>
+      </div>
+
+    {% else %}
+
+      <!-- Pending Section -->
+      <hr class="section-line" id="pending-section">
+      <div class="section-box">
+        <h3>Pending Appointments (Accepted but not Prescribed)</h3>
+        {% if pending_appointments %}
+        <table>
+          <thead>
+            <tr>
+              <th>Patient Name</th>
+              <th>Appointment Date</th>
+              <th>Problem</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for appt in pending_appointments %}
+            <tr>
+              <td>{{ appt.patient }}</td>
+              <td>{{ appt.date }}</td>
+              <td>{{ appt.problem }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p>No pending appointments.</p>
+        {% endif %}
+      </div>
+
+      <!-- Completed Section -->
+      <hr class="section-line" id="completed-section">
+      <div class="section-box">
+        <h3>Completed Appointments</h3>
+        {% if completed_appointments %}
+        <table>
+          <thead>
+            <tr>
+              <th>Patient Name</th>
+              <th>Appointment Date</th>
+              <th>Problem</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for appt in completed_appointments %}
+            <tr>
+              <td>{{ appt.patient }}</td>
+              <td>{{ appt.date }}</td>
+              <td>{{ appt.problem }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p>No completed appointments yet.</p>
+        {% endif %}
+      </div>
+
+      <!-- Total Section -->
+      <hr class="section-line" id="total-section">
+      <div class="section-box">
+        <h3>Total Appointments</h3>
+        {% if total_appointments %}
+        <table>
+          <thead>
+            <tr>
+              <th>Patient Name</th>
+              <th>Appointment Date</th>
+              <th>Problem</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for appt in total_appointments %}
+            <tr>
+              <td>{{ appt.patient }}</td>
+              <td>{{ appt.date }}</td>
+              <td>{{ appt.problem }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        {% if not show_all %}
+          <a href="{{ url_for('doctor_dashboard', name=name, show_all='yes') }}#total-section" class="more-btn">More</a>
+        {% endif %}
+
+        {% else %}
+        <p>No appointments found.</p>
+        {% endif %}
+      </div>
+
+    {% endif %}
+
+  </div>
+
+  <script>
+    const fadeElements = document.querySelectorAll('.navbar, .welcome-banner, .dashboard-container');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = 1;
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    fadeElements.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

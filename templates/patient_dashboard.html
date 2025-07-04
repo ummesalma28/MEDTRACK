@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Patient Dashboard - MedTrack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f0f6ff;
+      font-family: Arial, sans-serif;
+    }
+
+    .navbar {
+      background-color: #0a3d62;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 30px;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .navbar a:hover {
+      text-decoration: underline;
+    }
+
+    .welcome-banner {
+      background: linear-gradient(90deg, #0a3d62, #317dea);
+      color: white;
+      padding: 30px;
+      text-align: center;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-banner p {
+      color: white;
+      margin-top: 8px;
+      font-size: 16px;
+    }
+
+    .dashboard-container {
+      padding: 30px;
+      text-align: center;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background-color: white;
+      width: 250px;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    .card h3 {
+      margin: 0;
+      color: #317dea;
+      font-size: 28px;
+    }
+
+    .card p {
+      margin: 10px 0 0;
+      color: #555;
+    }
+
+    h2, h3 {
+      color: #0a3d62;
+    }
+
+    table {
+      width: 90%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      font-size: 16px;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #317dea;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f2f8ff;
+    }
+
+    .book-btn, .more-btn {
+      background: linear-gradient(90deg, #0a3d62, #317dea);
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s;
+    }
+
+    .book-btn:hover, .more-btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(90deg, #317dea, #0a3d62);
+    }
+
+    .book-section {
+      margin-bottom: 30px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid #ccc;
+      margin: 40px auto;
+      width: 80%;
+    }
+
+    p {
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <a href="{{ url_for('patient_dash', name=name) }}">Dashboard</a>
+    <a href="{{ url_for('patient_profile', name=name) }}">Profile</a>
+    <a href="{{ url_for('index') }}">Logout</a>
+  </div>
+
+  <div class="welcome-banner">
+    <strong>Welcome, {{ name }}</strong>
+    <p>Track your Appointments and Prescriptions with MedTrack</p>
+  </div>
+
+  <div class="dashboard-container">
+    <h2>Patient Dashboard</h2>
+
+    <div class="book-section">
+      <a href="{{ url_for('book_appointment', name=name) }}" style="text-decoration:none;">
+        <button class="book-btn">Book Appointment</button>
+      </a>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats">
+      <div class="card">
+        <h3>{{ upcoming_count }}</h3>
+        <p>Upcoming Appointments</p>
+      </div>
+      <div class="card">
+        <h3>{{ completed_count }}</h3>
+        <p>Completed Consultations</p>
+      </div>
+      <div class="card">
+        <h3>{{ prescription_count }}</h3>
+        <p>Prescriptions Available</p>
+      </div>
+    </div>
+
+    <!-- Upcoming Appointments -->
+    <h3>Upcoming Appointments</h3>
+    {% if upcoming_appointments %}
+    <table>
+      <tr>
+        <th>Doctor Name</th>
+        <th>Appointment Date</th>
+        <th>Time</th>
+        <th>Problem</th>
+      </tr>
+      {% for a in upcoming_appointments %}
+      <tr>
+        <td>{{ a.doctor }}</td>
+        <td>{{ a.date }}</td>
+        <td>{{ a.time }}</td>
+        <td>{{ a.problem }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p>No upcoming appointments.</p>
+    {% endif %}
+
+    <hr>
+
+    <!-- Completed Appointments -->
+    <h3>Completed Appointments</h3>
+    {% if completed_appointments %}
+    <table>
+      <tr>
+        <th>Doctor Name</th>
+        <th>Appointment Date</th>
+        <th>Time</th>
+        <th>Prescription</th>
+      </tr>
+      {% for a in completed_appointments %}
+      <tr>
+        <td>{{ a.doctor }}</td>
+        <td>{{ a.date }}</td>
+        <td>{{ a.time }}</td>
+        <td>{{ a.prescription }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p>No completed appointments.</p>
+    {% endif %}
+
+    <hr>
+
+    <!-- Prescriptions -->
+    <h3>Prescriptions</h3>
+    {% if prescriptions %}
+    <table>
+      <tr>
+        <th>Doctor Name</th>
+        <th>Prescription</th>
+      </tr>
+      {% for p in prescriptions %}
+      <tr>
+        <td>{{ p.doctor }}</td>
+        <td>{{ p.medicine }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% else %}
+    <p>No prescriptions yet.</p>
+    {% endif %}
+
+  </div>
+
+</body>
+</html>

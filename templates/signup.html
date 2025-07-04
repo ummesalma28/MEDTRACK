@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Signup - MedTrack</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f8ff;
+      overflow-x: hidden;
+    }
+
+    h2 {
+      margin-top: 30px;
+      font-size: 32px;
+      text-align: center;
+      color: #0a3d62;
+      animation: fadeDown 1s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeDown {
+      from { transform: translateY(-30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .main-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 40px;
+      gap: 80px;
+      animation: fadeUp 1.2s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .image-side img {
+      width: 400px;
+      height: 600px;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .box {
+      width: 550px;
+      border: 2px solid #ccc;
+      padding: 25px;
+      border-radius: 12px;
+      background-color: white;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 80%;
+      gap: 12px;
+    }
+
+    label {
+      font-weight: bold;
+      color: #333;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="password"] {
+      padding: 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    .register-btn {
+      background: linear-gradient(135deg, #317dea, #0a3d62);
+      color: white;
+      cursor: pointer;
+      border: none;
+      padding: 12px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    .register-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-2px);
+    }
+
+    .role-group {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      margin: 15px 0;
+    }
+
+    .role-option input[type="radio"] {
+      display: none;
+    }
+
+    .role-option label {
+      display: inline-block;
+      padding: 12px 25px;
+      background: linear-gradient(135deg, #317dea, #0a3d62);
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid #0a3d62;
+      font-size: 15px;
+      font-weight: bold;
+      opacity: 0.8;
+    }
+
+    .role-option input[type="radio"]:checked + label {
+      background-color: #0a3d62;
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      border: 2px solid #063051;
+      opacity: 1;
+    }
+
+    .gender-group {
+      display: flex;
+      gap: 30px;
+    }
+
+    .login-link {
+      text-align: center;
+    }
+
+    .login-link a {
+      color: #317dea;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    @media (max-width: 900px) {
+      .main-container {
+        flex-direction: column;
+        gap: 30px;
+      }
+
+      .image-side img {
+        width: 300px;
+        height: auto;
+      }
+
+      .box {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+<body>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul>
+      {% for category, message in messages %}
+        <li style="color: red;">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+
+  <h2>Register</h2>
+
+  <div class="main-container">
+    <!-- Image Left -->
+    <div class="image-side">
+    </div>
+
+    <!-- Form Right -->
+    <div class="box">
+      <form action="{{ url_for('signup') }}" method="POST">
+        <label>Role</label>
+        <div class="role-group">
+          <div class="role-option">
+            <input type="radio" id="doctor" name="role" value="doctor" required>
+            <label for="doctor">Doctor</label>
+          </div>
+          <div class="role-option">
+            <input type="radio" id="patient" name="role" value="patient">
+            <label for="patient">Patient</label>
+          </div>
+        </div>
+
+        <label for="fullname">Full Name</label>
+        <input type="text" id="fullname" name="fullname" placeholder="Enter your full name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="10-digit number" pattern="[0-9]{10}" required>
+
+        <label>Gender</label>
+        <div class="gender-group">
+          <label><input type="radio" name="gender" value="male" required> Male</label>
+          <label><input type="radio" name="gender" value="female"> Female</label>
+        </div>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Create a password" required>
+
+        <button type="submit" class="register-btn">Sign Up</button>
+      </form>
+
+      <div class="login-link">
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const fadeElements = document.querySelectorAll('h2, .main-container');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = 1;
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    fadeElements.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us - MedTrack</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+        }
+
+        .navbar {
+            background-color: #1f3c88;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .contact-container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .contact-container h2 {
+            color: #1f3c88;
+            margin-bottom: 15px;
+        }
+
+        .contact-container p {
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .info-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .info-list li {
+            margin-bottom: 10px;
+            color: #444;
+        }
+
+        /* Common Button Style */
+        .button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background-color: #1f3c88;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .button:hover {
+            background-color: #15306b;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <h1>MedTrack</h1>
+    </div>
+
+    <div class="contact-container">
+        <h2>Contact Us</h2>
+        <p>If you have any questions, suggestions, or technical issues regarding MedTrack, please reach out to us:</p>
+
+        <ul class="info-list">
+            <li><strong>Email:</strong> support@medtrack.com</li>
+            <li><strong>Phone:</strong> +91 98765 43210</li>
+            <li><strong>Address:</strong> AWS EC2 Deployment Office, Hyderabad, Telangana, India</li>
+        </ul>
+
+        <p>For urgent queries, contact your assigned project mentor.</p>
+
+        <a href="{{ url_for('index') }}" class="button">← Back to Home</a>
+    </div>
+
+</body>
+</html>

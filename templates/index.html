@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MedTrack - Your Health Partner</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f9fbfd;
+      color: #2c3e50;
+    }
+
+    .header {
+      background-color: #1f3c88;
+      color: white;
+      text-align: center;
+      padding: 70px 20px;
+      border-bottom-left-radius: 50px;
+      border-bottom-right-radius: 50px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      animation: fadeDown 1s ease-out forwards;
+      opacity: 0;
+    }
+
+    .header h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .button-block {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 40px 0;
+      animation: fadeUp 1.2s ease-out forwards;
+      opacity: 0;
+    }
+
+    .button-block a, .button-block button {
+      text-decoration: none;
+      padding: 12px 28px;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      color: white;
+      background-color: #317dea;
+    }
+
+    .button-block a:hover, .button-block button:hover {
+      background-color: #255bb5;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .info-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 50px;
+      padding: 60px 20px;
+      background-color: white;
+      border-radius: 20px;
+      margin: 30px auto;
+      width: 90%;
+      max-width: 1200px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.05);
+      animation: fadeUp 1.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    .info-section img {
+      width: 320px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .info-section img:hover {
+      transform: scale(1.05);
+    }
+
+    .info-text {
+      max-width: 500px;
+    }
+
+    .info-text h2 {
+      color: #1f3c88;
+      margin-bottom: 15px;
+    }
+
+    .info-text p {
+      color: #555;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    #about {
+      background-color: #f1f6fc;
+      padding: 60px 20px;
+      text-align: center;
+      border-top: 2px solid #e1eaf7;
+      border-radius: 20px;
+      margin: 40px 10px;
+      animation: fadeUp 1.8s ease-out forwards;
+      opacity: 0;
+    }
+
+    #about h2 {
+      color: #1f3c88;
+      margin-bottom: 20px;
+    }
+
+    #about p {
+      max-width: 700px;
+      margin: 0 auto;
+      color: #555;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background-color: #1f3c88;
+      color: white;
+      font-size: 13px;
+      opacity: 0;
+      animation: fadeUp 2s ease-out forwards;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      .info-section {
+        flex-direction: column;
+        padding: 40px 10px;
+      }
+
+      .header h1 {
+        font-size: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header">
+    <h1>MedTrack</h1>
+    <p>Your Health, Our Priority – Track Medicines & Appointments</p>
+  </div>
+
+  <!-- Buttons -->
+  <div class="button-block">
+    <a href="{{ url_for('signup') }}">Sign Up</a>
+    <a href="{{ url_for('login') }}">Login</a>
+    <button onclick="document.getElementById('about').scrollIntoView({behavior: 'smooth'})">About Us</button>
+    <a href="{{ url_for('contact') }}">Contact Us</a>
+  </div>
+
+  <!-- Info Section -->
+  <div class="info-section">
+    <div>
+      <p style="margin-top: 10px; font-weight: bold; font-size: 16px; color: #1f3c88;">
+        MedTrack — Never miss your dose
+      </p>
+    </div>
+
+    <div class="info-text">
+      <h2>Why Medicine Tracking Matters?</h2>
+      <p>
+        Consistent medication tracking improves recovery and health outcomes. MedTrack ensures timely doses, prevents complications, and helps doctors monitor your progress.
+      </p>
+      <p>
+        Whether for chronic care or daily wellness, MedTrack gives you peace of mind and control over your treatment.
+      </p>
+    </div>
+  </div>
+
+  <!-- About Us -->
+  <div id="about">
+    <h2>About Us</h2>
+    <p>
+      MedTrack is a simple, reliable healthcare assistant that connects doctors and patients for smooth prescription management, medicine tracking, and appointment follow-ups. Our goal: smarter health, everyday.
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 MedTrack. All rights reserved.
+  </footer>
+
+  <!-- Animation on Scroll -->
+  <script>
+    const fadeElements = document.querySelectorAll('.header, .button-block, .info-section, #about, footer');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = 1;
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    fadeElements.forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>
